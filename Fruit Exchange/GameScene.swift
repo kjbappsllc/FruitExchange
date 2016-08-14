@@ -18,8 +18,8 @@ class GameScene: SKScene {
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     
-    let TileWidth: CGFloat = 49.0
-    let TileHeight: CGFloat = 52.0
+    let TileWidth: CGFloat = 48.0*1.7
+    let TileHeight: CGFloat = 52.0*1.7
     
     let gameLayer = SKNode()
     let fruitsLayer = SKNode()
@@ -29,7 +29,7 @@ class GameScene: SKScene {
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         let background = SKSpriteNode(imageNamed: "Background")
-        background.size = CGSize(width: background.size.width+50, height: background.size.height+83)
+        background.size = CGSize(width: self.frame.width, height: self.frame.height)
         background.zPosition = -1
         addChild(background)
         
@@ -54,6 +54,7 @@ class GameScene: SKScene {
         for fruit in fruits {
             let sprite = SKSpriteNode(imageNamed: fruit.fruitType.spriteName)
             sprite.position = pointForColumn(fruit.column, row:fruit.row)
+            sprite.size = CGSize(width: TileWidth, height: TileHeight)
             fruitsLayer.addChild(sprite)
             fruit.sprite = sprite
         }
@@ -79,7 +80,7 @@ class GameScene: SKScene {
             for column in 0..<NumColumns {
                 if level.tileAtColumn(column, row: row) != nil {
                     let tileNode = SKSpriteNode(imageNamed: "Tile")
-                    //tileNode.size = CGSize(width: TileWidth, height: TileHeight)
+                    tileNode.size = CGSize(width: TileWidth, height: TileHeight)
                     tileNode.position = pointForColumn(column, row: row)
                     tilesLayer.addChild(tileNode)
                 }
@@ -140,6 +141,7 @@ class GameScene: SKScene {
             swap.fruitA.fruitType = FruitType.getComplementType(swap.fruitA.fruitType.rawValue)
             
             spriteA.position = pointForColumn(swap.fruitA.column, row:swap.fruitA.row)
+            spriteA.size = CGSize(width: TileWidth, height: TileHeight)
             fruitsLayer.addChild(spriteA)
             spriteA.runAction(SKAction.sequence([scaleA, SKAction.scaleTo(1.0, duration: 0.1)]))
             
@@ -150,6 +152,7 @@ class GameScene: SKScene {
             swap.fruitB.fruitType = FruitType.getComplementType(swap.fruitB.fruitType.rawValue)
             
             spriteB.position = pointForColumn(swap.fruitB.column, row:swap.fruitB.row)
+            spriteB.size = CGSize(width: TileWidth, height: TileHeight)
             fruitsLayer.addChild(spriteB)
             spriteB.runAction(SKAction.sequence([scaleB, SKAction.scaleTo(1.0, duration: 0.1)]))
         }

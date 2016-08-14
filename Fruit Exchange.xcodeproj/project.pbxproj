@@ -21,7 +21,7 @@
 		04C65A5B1D5E78F80019CC64 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C65A5A1D5E78F80019CC64 /* Extension.swift */; };
 		04C65A5D1D5E7FEE0019CC64 /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C65A5C1D5E7FEE0019CC64 /* Swap.swift */; };
 		04C65A621D5ECC070019CC64 /* Level_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C65A611D5ECC070019CC64 /* Level_0.json */; };
-		04C65A641D5FCC850019CC64 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 04C65A631D5FCC850019CC64 /* Sprites.atlas */; };
+		04C65A661D6111FB0019CC64 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 04C65A651D6111FB0019CC64 /* Sprites.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +41,7 @@
 		04C65A5A1D5E78F80019CC64 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extension.swift; path = ../Extension.swift; sourceTree = "<group>"; };
 		04C65A5C1D5E7FEE0019CC64 /* Swap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		04C65A611D5ECC070019CC64 /* Level_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_0.json; sourceTree = "<group>"; };
-		04C65A631D5FCC850019CC64 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		04C65A651D6111FB0019CC64 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +85,7 @@
 				04C65A511D5BFFF50019CC64 /* Tile.swift */,
 				04C65A3B1D5BD0A60019CC64 /* GameViewController.swift */,
 				04C65A3D1D5BD0A60019CC64 /* Main.storyboard */,
-				04C65A631D5FCC850019CC64 /* Sprites.atlas */,
+				04C65A651D6111FB0019CC64 /* Sprites.atlas */,
 				04C65A401D5BD0A60019CC64 /* Assets.xcassets */,
 				04C65A601D5ECC070019CC64 /* Levels */,
 				04C65A421D5BD0A60019CC64 /* LaunchScreen.storyboard */,
@@ -161,7 +161,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04C65A641D5FCC850019CC64 /* Sprites.atlas in Resources */,
+				04C65A661D6111FB0019CC64 /* Sprites.atlas in Resources */,
 				04C65A381D5BD0A60019CC64 /* GameScene.sks in Resources */,
 				04C65A621D5ECC070019CC64 /* Level_0.json in Resources */,
 				04C65A441D5BD0A60019CC64 /* LaunchScreen.storyboard in Resources */,
