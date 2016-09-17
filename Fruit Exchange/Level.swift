@@ -16,6 +16,7 @@ class Level {
     private var fruits = Array2D<Fruit>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
     private var goal = Array2D<Fruit>(columns: NumColumns, rows: NumRows)
+    var maximumMoves = 0
     
     init(filename: String) {
         // 1
@@ -25,6 +26,10 @@ class Level {
         guard let tilesArray = dictionary["Tiles"] as? [[Int]] else { return }
         
         guard let fruitsArray = dictionary["Start"] as? [[Int]] else { return }
+        
+        guard let goalArray = dictionary["Goal"] as? [[Int]] else { return }
+        
+       
         
         // 3
         for (row, rowArray) in tilesArray.enumerate() {
@@ -53,6 +58,22 @@ class Level {
             }
         }
         
+        for (row, goalArray) in goalArray.enumerate() {
+            // 4
+            let goalRow = NumRows - row - 1
+            // 5
+            for (column, value) in goalArray.enumerate() {
+                if value != 0 {
+                    var fruitType: FruitType
+                    fruitType = FruitType.getFruitType(value)
+                    
+                    let fruit = Fruit(column: column, row: goalRow, fruitType: fruitType)
+                    goal[column,goalRow] = fruit
+                }
+            }
+        }
+        
+        maximumMoves = dictionary["Moves"] as! Int
     }
     
     func createInitialFruit() -> Set<Fruit> {
@@ -82,6 +103,26 @@ class Level {
         return tiles[column, row]
     }
     
+    func isCorrectPattern() -> Bool {
+        var isPattern = Bool()
+        
+        for row in 0..<NumRows {
+            for column in 0..<NumColumns {
+                if let fruit = fruits[column,row] {
+                    if fruit.fruitType == goal[column,row]?.fruitType {
+                        isPattern = true
+                    }
+                    else if fruit.fruitType != goal[column,row]?.fruitType {
+                        isPattern = false
+                        return isPattern
+                    }
+                }
+            }
+        }
+
+        return isPattern
+    }
+    
     func performSwap(swap: Swap) {
         let columnA = swap.fruitA.column
         let rowA = swap.fruitA.row
@@ -95,5 +136,12 @@ class Level {
         fruits[columnB,rowB] = swap.fruitA
         swap.fruitA.column = columnB
         swap.fruitA.row = rowB
+    }
+    
+    func changeToComplement(swap:Swap) {
+        if swap.isComplement() == false {
+            swap.fruitA.fruitType = FruitType.getComplementType(swap.fruitA.fruitType.rawValue)
+            swap.fruitB.fruitType = FruitType.getComplementType(swap.fruitB.fruitType.rawValue)
+        }
     }
 }

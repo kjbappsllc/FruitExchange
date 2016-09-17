@@ -117,5 +117,5 @@ class Fruit: CustomStringConvertible, Hashable {
 }
 
 func ==(lhs: Fruit, rhs: Fruit) -> Bool {
-    return lhs.column == rhs.column && lhs.row == rhs.row
+    return (lhs.column == rhs.column && lhs.row == rhs.row) && (lhs.fruitType == rhs.fruitType)
 }
