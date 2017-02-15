@@ -10,27 +10,43 @@ import SpriteKit
 
 class GameScene: SKScene {
 
-    var selectionSprite = SKSpriteNode()
-    var patternButton = SKSpriteNode()
-    private var HUD = SKSpriteNode()
+    private var selectionSprite = SKSpriteNode()
     
-    var swipeHandler: ((Swap) -> ())?
+    private var _level: Level!
+    private var movesLabel = SKLabelNode()
     
-    var level: Level!
-    var movesLabel = SKLabelNode()
+    fileprivate var swipeFromColumn: Int?
+    fileprivate var swipeFromRow: Int?
     
-    private var swipeFromColumn: Int?
-    private var swipeFromRow: Int?
-    
-    let TileWidth: CGFloat = 48.0 * 1.6
-    let TileHeight: CGFloat = 52.0 * 1.6
+    private let TileWidth: CGFloat = 48.0 * 1.6
+    private let TileHeight: CGFloat = 52.0 * 1.6
     
     private let gameLayer = SKNode()
+    private let hudLayer = SKNode()
     private let fruitsLayer = SKNode()
     private let tilesLayer = SKNode()
-    private let hudLayer = SKNode()
     
-    override func didMoveToView(view: SKView) {
+    private var _swipeHandler: ((Swap) -> ())?
+    
+    var swipeHandler: ((Swap) -> ())? {
+        get {
+            return _swipeHandler
+        }
+        set {
+            _swipeHandler = newValue
+        }
+    }
+    
+    var level: Level {
+        get {
+            return _level
+        }
+        set {
+            _level = newValue
+        }
+    }
+    
+    override func didMove(to view: SKView) {
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         let background = SKSpriteNode(imageNamed: "Background")
@@ -39,8 +55,7 @@ class GameScene: SKScene {
         addChild(background)
         
         addChild(gameLayer)
-        gameLayer.hidden = true
-        hudLayer.hidden = true
+        gameLayer.isHidden = true
         movesLabel.alpha = 0
         
         let layerPosition = CGPoint(
@@ -53,40 +68,16 @@ class GameScene: SKScene {
         fruitsLayer.position = layerPosition
         gameLayer.addChild(fruitsLayer)
         
-        hudLayer.position = CGPoint(x: 0, y: self.frame.height/2)
-        self.addChild(hudLayer)
-        
         swipeFromColumn = nil
         swipeFromRow = nil
         
     }
     
-    func addHud() {
-        HUD = SKSpriteNode(imageNamed: "topBar")
-        
-        HUD.size = CGSize(width: HUD.size.width * 2, height: HUD.size.height * 2)
-        HUD.position = CGPoint(x: 0, y: -HUD.size.height/2)
-        
-        movesLabel.fontSize = 80.0
-        movesLabel.fontName = "Hercules"
-        movesLabel.fontColor = SKColor(red: 248/255, green: 106/255, blue: 106/255, alpha: 1.0)
-        movesLabel.position = CGPoint(x: 0, y: 35)
-        movesLabel.text = String(level.maximumMoves)
-        
-        patternButton = SKSpriteNode(imageNamed: "patternButton")
-        patternButton.size = CGSize(width: patternButton.size.width * 2, height: patternButton.size.height * 2)
-        patternButton.position = CGPoint(x: 0, y: -(HUD.size.height / 2) + 70)
-        
-        hudLayer.addChild(HUD)
-        HUD.addChild(movesLabel)
-        HUD.addChild(patternButton)
-    }
-    
-    func updateMovesLabel(number: Int) {
+    func updateMovesLabel(_ number: Int) {
         movesLabel.text = String(number)
     }
     
-    func addSpritesForFruit(fruits: Set<Fruit>) {
+    func addSpritesForFruit(_ fruits: Set<Fruit>) {
         for fruit in fruits {
             let sprite = SKSpriteNode(imageNamed: fruit.fruitType.spriteName)
             sprite.position = pointForColumn(fruit.column, row:fruit.row)
@@ -96,13 +87,13 @@ class GameScene: SKScene {
         }
     }
 
-    func pointForColumn(column: Int, row: Int) -> CGPoint {
+    func pointForColumn(_ column: Int, row: Int) -> CGPoint {
         return CGPoint(
             x: CGFloat(column)*TileWidth + TileWidth/2,
             y: CGFloat(row)*TileHeight + TileHeight/2)
     }
     
-    func convertPoint(point: CGPoint) -> (success: Bool, column: Int, row: Int) {
+    func convertPoint(_ point: CGPoint) -> (success: Bool, column: Int, row: Int) {
         if point.x >= 0 && point.x < CGFloat(NumColumns)*TileWidth &&
             point.y >= 0 && point.y < CGFloat(NumRows)*TileHeight {
             return (true, Int(point.x / TileWidth), Int(point.y / TileHeight))
@@ -130,7 +121,7 @@ class GameScene: SKScene {
         }
     }
     
-    func showSelectionIndicatorForFruit(fruit: Fruit) {
+    func showSelectionIndicatorForFruit(_ fruit: Fruit) {
         if selectionSprite.parent != nil {
             selectionSprite.removeFromParent()
         }
@@ -138,7 +129,7 @@ class GameScene: SKScene {
         if let sprite = fruit.sprite {
             let texture = SKTexture(imageNamed: fruit.fruitType.highlightedSpriteName)
             selectionSprite.size = CGSize(width: TileWidth, height: TileHeight)
-            selectionSprite.runAction(SKAction.setTexture(texture))
+            selectionSprite.run(SKAction.setTexture(texture))
             
             sprite.addChild(selectionSprite)
             selectionSprite.alpha = 1.0
@@ -146,36 +137,36 @@ class GameScene: SKScene {
     }
     
     func hideSelectionIndicator() {
-        selectionSprite.runAction(SKAction.sequence([
-            SKAction.fadeOutWithDuration(0.3),
+        selectionSprite.run(SKAction.sequence([
+            SKAction.fadeOut(withDuration: 0.3),
             SKAction.removeFromParent()]))
     }
     
-    func animateSwap(swap: Swap, completion: () -> ()) {
+    func animateSwap(_ swap: Swap, completion: @escaping () -> ()) {
         let spriteA = swap.fruitA.sprite!
         let spriteB = swap.fruitB.sprite!
         
         spriteA.zPosition = 100
         spriteB.zPosition = 90
         
-        let Duration: NSTimeInterval = 0.3
+        let Duration: TimeInterval = 0.3
         
-        let moveA = SKAction.moveTo(spriteB.position, duration: Duration)
-        moveA.timingMode = .EaseOut
-        spriteA.runAction(moveA, completion: completion)
+        let moveA = SKAction.move(to: spriteB.position, duration: Duration)
+        moveA.timingMode = .easeOut
+        spriteA.run(moveA, completion: completion)
         
-        let moveB = SKAction.moveTo(spriteA.position, duration: Duration)
-        moveB.timingMode = .EaseOut
-        spriteB.runAction(moveB)
+        let moveB = SKAction.move(to: spriteA.position, duration: Duration)
+        moveB.timingMode = .easeOut
+        spriteB.run(moveB)
     }
     
-    func changeSprites(swap:Swap, completion: () -> ()) {
+    func changeSprites(_ swap:Swap, completion: @escaping () -> ()) {
         
         if swap.isComplement() == false {
             var spriteA = swap.fruitA.sprite!
             var spriteB = swap.fruitB.sprite!
 
-            let scaleA = SKAction.scaleTo(1.1, duration: 0.1)
+            let scaleA = SKAction.scale(to: 1.1, duration: 0.1)
             
             spriteA.removeFromParent()
             spriteA = SKSpriteNode(imageNamed: swap.fruitA.fruitType.spriteName)
@@ -184,9 +175,9 @@ class GameScene: SKScene {
             spriteA.position = pointForColumn(swap.fruitA.column, row:swap.fruitA.row)
             spriteA.size = CGSize(width: TileWidth, height: TileHeight)
             fruitsLayer.addChild(spriteA)
-            spriteA.runAction(SKAction.sequence([scaleA, SKAction.scaleTo(1.0, duration: 0.1)]))
+            spriteA.run(SKAction.sequence([scaleA, SKAction.scale(to: 1.0, duration: 0.1)]))
             
-            let scaleB = SKAction.scaleTo(1.05, duration: 0.1)
+            let scaleB = SKAction.scale(to: 1.05, duration: 0.1)
             spriteB.removeFromParent()
             spriteB = SKSpriteNode(imageNamed: swap.fruitB.fruitType.spriteName)
             swap.fruitB.sprite = spriteB
@@ -194,50 +185,35 @@ class GameScene: SKScene {
             spriteB.position = pointForColumn(swap.fruitB.column, row:swap.fruitB.row)
             spriteB.size = CGSize(width: TileWidth, height: TileHeight)
             fruitsLayer.addChild(spriteB)
-            spriteB.runAction(SKAction.sequence([scaleB, SKAction.scaleTo(1.0, duration: 0.1)]),completion:completion)
+            spriteB.run(SKAction.sequence([scaleB, SKAction.scale(to: 1.0, duration: 0.1)]),completion:completion)
         }
         else{
-            self.runAction(SKAction.waitForDuration(0), completion: completion)
+            self.run(SKAction.wait(forDuration: 0), completion: completion)
         }
     }
     
-    func animateGameOver(completion: () -> ()) {
-        let action = SKAction.moveBy(CGVector(dx: size.width, dy: 0), duration: 0.4)
-        action.timingMode = .EaseIn
-        gameLayer.runAction(action, completion: completion)
-        
-        let action2 = SKAction.moveBy(CGVector(dx: 0, dy: size.height), duration: 0.8)
-        action2.timingMode = .EaseIn
-        hudLayer.runAction(action2)
+    func animateGameOver(_ completion: @escaping () -> ()) {
+        let action = SKAction.move(by: CGVector(dx: size.width, dy: 0), duration: 0.4)
+        action.timingMode = .easeIn
+        gameLayer.run(action, completion: completion)
     }
     
     func animateBeginGame() {
-        gameLayer.hidden = false
+        gameLayer.isHidden = false
         gameLayer.position = CGPoint(x: size.width, y: 0)
-        let gameLayerMove = SKAction.moveBy(CGVector(dx: -size.width, dy: 0), duration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7)
-        gameLayerMove.timingMode = .EaseOut
-        gameLayer.runAction(gameLayerMove)
-        
-        hudLayer.hidden = false
-        hudLayer.position = CGPoint(x: 0, y: size.height)
-        let hudAction = SKAction.moveBy(CGVector(dx: 0, dy: -size.height/2), duration: 0.5, delay: 0.2, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.9)
-        hudAction.timingMode = .EaseOut
-        hudLayer.runAction(hudAction)
-        
-        let movesAction = SKAction.fadeInWithDuration(0.4, delay: 0.3, usingSpringWithDamping: 0.2, initialSpringVelocity: 0)
-        movesAction.timingMode = .EaseIn
-        let moveScaleAction = SKAction.scaleTo(1.1, duration: 0.9, delay: 0.5, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.1)
-        movesLabel.runAction(SKAction.group([movesAction,moveScaleAction]))
+        let gameLayerMove = SKAction.move(by: CGVector(dx: -size.width, dy: 0) , duration: 0.7)
+        gameLayerMove.timingMode = .easeOut
+        gameLayer.run(gameLayerMove)
     }
     
     func removeAllFruitSprites() {
         fruitsLayer.removeAllChildren()
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // 1
         guard let touch = touches.first else { return }
-        let location = touch.locationInNode(fruitsLayer)
+        let location = touch.location(in: fruitsLayer)
         // 2
         let (success, column, row) = convertPoint(location)
         if success {
@@ -252,13 +228,13 @@ class GameScene: SKScene {
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         // 1
         guard swipeFromColumn != nil else { return }
         
         // 2
         guard let touch = touches.first else { return }
-        let location = touch.locationInNode(fruitsLayer)
+        let location = touch.location(in: fruitsLayer)
         
         let (success, column, row) = convertPoint(location)
         if success {
@@ -285,7 +261,7 @@ class GameScene: SKScene {
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if selectionSprite.parent != nil && swipeFromColumn != nil {
             hideSelectionIndicator()
         }
@@ -295,13 +271,12 @@ class GameScene: SKScene {
         
     }
     
-    override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let touches = touches {
-            touchesEnded(touches, withEvent: event)
-        }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touches = touches
+        touchesEnded(touches, with: event)
     }
     
-    func trySwapHorizontal(horzDelta: Int, vertical vertDelta: Int) {
+    func trySwapHorizontal(_ horzDelta: Int, vertical vertDelta: Int) {
         // 1
         let toColumn = swipeFromColumn! + horzDelta
         let toRow = swipeFromRow! + vertDelta
@@ -319,7 +294,7 @@ class GameScene: SKScene {
         }
     }
    
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         /* Called before each frame is rendered */
     }
 }

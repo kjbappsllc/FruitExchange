@@ -1,0 +1,17 @@
+version: "Apple Swift version 3.0.2 (swiftlang-800.0.63 clang-800.0.42.1)"
+options: "ff9ce58ddc1be8f10f0fd1951d952c51"
+build_time: [540491191, 748378000]
+inputs:
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/Level.swift": [532535747, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/Fruit.swift": [532535543, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/GameScene.swift": [532742203, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/Tile.swift": [524248434, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/CircleMenuLib/CircleMenuButton/CircleMenuButton.swift": [529995778, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/GameViewController.swift": [532535937, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/AppDelegate.swift": [532500937, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/Array2D.swift": [532535544, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/CircleMenuLib/CircleMenuLoader/CircleMenuLoader.swift": [529995778, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Extension.swift": [532721246, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/Swap.swift": [524453482, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/CircleMenuLib/CircleMenu.swift": [539630983, 0]
+  "/Users/mac/Desktop/Fruit Exchange/Fruit Exchange/MainViewController.swift": [532901220, 0]

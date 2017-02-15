@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0424C3F91D8AD59100476158 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 0424C3F81D8AD59100476158 /* Sprites.atlas */; };
+		04386E5D1DDCE0B000FCC7A2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04386E5C1DDCE0B000FCC7A2 /* MainViewController.swift */; };
+		04386E641DDD5D9400FCC7A2 /* CircleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04386E5F1DDD5D9400FCC7A2 /* CircleMenu.swift */; };
+		04386E651DDD5D9400FCC7A2 /* CircleMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04386E611DDD5D9400FCC7A2 /* CircleMenuButton.swift */; };
+		04386E661DDD5D9400FCC7A2 /* CircleMenuLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04386E631DDD5D9400FCC7A2 /* CircleMenuLoader.swift */; };
 		04C65A361D5BD0A60019CC64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C65A351D5BD0A60019CC64 /* AppDelegate.swift */; };
 		04C65A381D5BD0A60019CC64 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 04C65A371D5BD0A60019CC64 /* GameScene.sks */; };
 		04C65A3A1D5BD0A60019CC64 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C65A391D5BD0A60019CC64 /* GameScene.swift */; };
@@ -27,6 +31,10 @@
 
 /* Begin PBXFileReference section */
 		0424C3F81D8AD59100476158 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
+		04386E5C1DDCE0B000FCC7A2 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		04386E5F1DDD5D9400FCC7A2 /* CircleMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleMenu.swift; sourceTree = "<group>"; };
+		04386E611DDD5D9400FCC7A2 /* CircleMenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleMenuButton.swift; sourceTree = "<group>"; };
+		04386E631DDD5D9400FCC7A2 /* CircleMenuLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleMenuLoader.swift; sourceTree = "<group>"; };
 		04C65A321D5BD0A60019CC64 /* Fruit Exchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fruit Exchange.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04C65A351D5BD0A60019CC64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04C65A371D5BD0A60019CC64 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -57,6 +65,93 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		041DD0D91DDABA4F0023644A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04C65A4B1D5BD5700019CC64 /* Fruit.swift */,
+				04C65A4D1D5BFCF50019CC64 /* Array2D.swift */,
+				04C65A4F1D5BFDC00019CC64 /* Level.swift */,
+				04C65A5C1D5E7FEE0019CC64 /* Swap.swift */,
+				04C65A511D5BFFF50019CC64 /* Tile.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		041DD0DA1DDABA590023644A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04C65A371D5BD0A60019CC64 /* GameScene.sks */,
+				04C65A391D5BD0A60019CC64 /* GameScene.swift */,
+				04386E5E1DDD5D9400FCC7A2 /* CircleMenuLib */,
+				04C65A3D1D5BD0A60019CC64 /* Main.storyboard */,
+				04C65A421D5BD0A60019CC64 /* LaunchScreen.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		041DD0DB1DDABA5F0023644A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				04C65A351D5BD0A60019CC64 /* AppDelegate.swift */,
+				04C65A3B1D5BD0A60019CC64 /* GameViewController.swift */,
+				04386E5C1DDCE0B000FCC7A2 /* MainViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		041DD0DC1DDABA8A0023644A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				04C65A601D5ECC070019CC64 /* Levels */,
+				04C65A451D5BD0A60019CC64 /* Info.plist */,
+				04C65A401D5BD0A60019CC64 /* Assets.xcassets */,
+				0424C3F81D8AD59100476158 /* Sprites.atlas */,
+				04E988E41D891E2E0054C6A5 /* Hercules.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		041DD0DD1DDABA910023644A /* Util */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
+		041DD0DE1DDABAD50023644A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				04C65A5A1D5E78F80019CC64 /* Extension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		04386E5E1DDD5D9400FCC7A2 /* CircleMenuLib */ = {
+			isa = PBXGroup;
+			children = (
+				04386E5F1DDD5D9400FCC7A2 /* CircleMenu.swift */,
+				04386E601DDD5D9400FCC7A2 /* CircleMenuButton */,
+				04386E621DDD5D9400FCC7A2 /* CircleMenuLoader */,
+			);
+			path = CircleMenuLib;
+			sourceTree = "<group>";
+		};
+		04386E601DDD5D9400FCC7A2 /* CircleMenuButton */ = {
+			isa = PBXGroup;
+			children = (
+				04386E611DDD5D9400FCC7A2 /* CircleMenuButton.swift */,
+			);
+			path = CircleMenuButton;
+			sourceTree = "<group>";
+		};
+		04386E621DDD5D9400FCC7A2 /* CircleMenuLoader */ = {
+			isa = PBXGroup;
+			children = (
+				04386E631DDD5D9400FCC7A2 /* CircleMenuLoader.swift */,
+			);
+			path = CircleMenuLoader;
+			sourceTree = "<group>";
+		};
 		04C65A291D5BD0A60019CC64 = {
 			isa = PBXGroup;
 			children = (
@@ -76,23 +171,12 @@
 		04C65A341D5BD0A60019CC64 /* Fruit Exchange */ = {
 			isa = PBXGroup;
 			children = (
-				04C65A351D5BD0A60019CC64 /* AppDelegate.swift */,
-				04E988E41D891E2E0054C6A5 /* Hercules.ttf */,
-				04C65A371D5BD0A60019CC64 /* GameScene.sks */,
-				04C65A391D5BD0A60019CC64 /* GameScene.swift */,
-				04C65A4B1D5BD5700019CC64 /* Fruit.swift */,
-				04C65A4D1D5BFCF50019CC64 /* Array2D.swift */,
-				04C65A5A1D5E78F80019CC64 /* Extension.swift */,
-				04C65A4F1D5BFDC00019CC64 /* Level.swift */,
-				04C65A5C1D5E7FEE0019CC64 /* Swap.swift */,
-				04C65A511D5BFFF50019CC64 /* Tile.swift */,
-				04C65A3B1D5BD0A60019CC64 /* GameViewController.swift */,
-				04C65A3D1D5BD0A60019CC64 /* Main.storyboard */,
-				0424C3F81D8AD59100476158 /* Sprites.atlas */,
-				04C65A401D5BD0A60019CC64 /* Assets.xcassets */,
-				04C65A601D5ECC070019CC64 /* Levels */,
-				04C65A421D5BD0A60019CC64 /* LaunchScreen.storyboard */,
-				04C65A451D5BD0A60019CC64 /* Info.plist */,
+				041DD0D91DDABA4F0023644A /* Model */,
+				041DD0DA1DDABA590023644A /* View */,
+				041DD0DB1DDABA5F0023644A /* Controller */,
+				041DD0DC1DDABA8A0023644A /* Resources */,
+				041DD0DE1DDABAD50023644A /* Extensions */,
+				041DD0DD1DDABA910023644A /* Util */,
 			);
 			path = "Fruit Exchange";
 			sourceTree = "<group>";
@@ -132,7 +216,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "KJB Apps LLC";
 				TargetAttributes = {
 					04C65A311D5BD0A60019CC64 = {
@@ -186,11 +270,15 @@
 				04C65A4C1D5BD5700019CC64 /* Fruit.swift in Sources */,
 				04C65A3A1D5BD0A60019CC64 /* GameScene.swift in Sources */,
 				04C65A521D5BFFF50019CC64 /* Tile.swift in Sources */,
+				04386E651DDD5D9400FCC7A2 /* CircleMenuButton.swift in Sources */,
 				04C65A3C1D5BD0A60019CC64 /* GameViewController.swift in Sources */,
 				04C65A361D5BD0A60019CC64 /* AppDelegate.swift in Sources */,
 				04C65A4E1D5BFCF50019CC64 /* Array2D.swift in Sources */,
+				04386E661DDD5D9400FCC7A2 /* CircleMenuLoader.swift in Sources */,
 				04C65A5B1D5E78F80019CC64 /* Extension.swift in Sources */,
 				04C65A5D1D5E7FEE0019CC64 /* Swap.swift in Sources */,
+				04386E641DDD5D9400FCC7A2 /* CircleMenu.swift in Sources */,
+				04386E5D1DDCE0B000FCC7A2 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,8 +318,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -276,8 +366,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -296,6 +388,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -307,10 +400,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Fruit Exchange/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.KJBApps.Fruit-Exchange";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -320,10 +414,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Fruit Exchange/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.KJBApps.Fruit-Exchange";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
