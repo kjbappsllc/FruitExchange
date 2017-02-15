@@ -15,6 +15,8 @@ class Level {
     
     private var fruits = Array2D<Fruit>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
+    
+    
     private var goal = Array2D<Fruit>(columns: NumColumns, rows: NumRows)
     
     private var _maximumMoves = 0
