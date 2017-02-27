@@ -8,29 +8,34 @@
 
 import Foundation
 
-let NumColumns = 6
-let NumRows = 6
-
 class Level {
     
-    private var fruits = Array2D<Fruit>(columns: NumColumns, rows: NumRows)
-    private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
-    private var goal = Array2D<Fruit>(columns: NumColumns, rows: NumRows)
-    
+    private var fruits: Array2D<Fruit>!
+    private var tiles: Array2D<Tile>!
+    private var goal: Array2D<Fruit>!
     private var _maximumMoves = 0
     
     var maximumMoves: Int {
         get {
             return _maximumMoves
         }
-        set {
-            _maximumMoves = newValue
+    }
+    
+    private var _gridSize = 0
+    
+    var gridSize: Int {
+        get {
+            return _gridSize
         }
     }
     
     init(filename: String) {
         
         guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename) else { return }
+        
+        _gridSize = dictionary["Grid"] as! Int
+        
+        setUpArrays(gridSize: _gridSize)
     
         guard let tilesArray = dictionary["Tiles"] as? [[Int]] else { return }
         
@@ -38,12 +43,22 @@ class Level {
         
         guard let goalArray = dictionary["Goal"] as? [[Int]] else { return }
         
-       
+        setUpLevel(tilesArray: tilesArray, fruitsArray: fruitsArray, goalArray: goalArray)
         
+        _maximumMoves = dictionary["Moves"] as! Int
+    }
+    
+    private func setUpArrays(gridSize: Int) {
+        fruits = Array2D<Fruit>(columns: gridSize, rows: gridSize)
+        tiles = Array2D<Tile>(columns: gridSize, rows: gridSize)
+        goal = Array2D<Fruit>(columns: gridSize, rows: gridSize)
+    }
+    
+    func setUpLevel(tilesArray: [[Int]], fruitsArray: [[Int]], goalArray: [[Int]]) {
         // 3
         for (row, rowArray) in tilesArray.enumerated() {
             // 4
-            let tileRow = NumRows - row - 1
+            let tileRow = _gridSize - row - 1
             // 5
             for (column, value) in rowArray.enumerated() {
                 if value == 1 {
@@ -53,43 +68,37 @@ class Level {
         }
         
         for (row, fruitsArray) in fruitsArray.enumerated() {
-            // 4
-            let fruitRow = NumRows - row - 1
             // 5
             for (column, value) in fruitsArray.enumerated() {
                 if value != 0 {
                     var fruitType: FruitType
                     fruitType = FruitType.getFruitType(value)
                     
-                    let fruit = Fruit(column: column, row: fruitRow, fruitType: fruitType)
-                    fruits[column,fruitRow] = fruit
+                    let fruit = Fruit(column: column, row: row, fruitType: fruitType)
+                    fruits[column,row] = fruit
                 }
             }
         }
         
         for (row, goalArray) in goalArray.enumerated() {
-            // 4
-            let goalRow = NumRows - row - 1
             // 5
             for (column, value) in goalArray.enumerated() {
                 if value != 0 {
                     var fruitType: FruitType
                     fruitType = FruitType.getFruitType(value)
                     
-                    let fruit = Fruit(column: column, row: goalRow, fruitType: fruitType)
-                    goal[column,goalRow] = fruit
+                    let fruit = Fruit(column: column, row: row, fruitType: fruitType)
+                    goal[column,row] = fruit
                 }
             }
         }
-        
-        _maximumMoves = dictionary["Moves"] as! Int
     }
     
     func createInitialFruit() -> Set<Fruit> {
         var set = Set<Fruit>()
         
-        for row in 0..<NumRows {
-            for column in 0..<NumColumns {
+        for row in 0..<_gridSize {
+            for column in 0..<_gridSize{
                 
                 if tiles[column,row] != nil {
                     let fruit = fruits[column,row]
@@ -101,22 +110,22 @@ class Level {
     }
     
     func FruitAtColumn(_ column: Int, row: Int) -> Fruit? {
-        assert(column >= 0 && column < NumColumns)
-        assert(row >= 0 && row < NumRows)
+        assert(column >= 0 && column < _gridSize)
+        assert(row >= 0 && row < _gridSize)
         return fruits[column,row]
     }
     
     func tileAtColumn(_ column: Int, row: Int) -> Tile? {
-        assert(column >= 0 && column < NumColumns)
-        assert(row >= 0 && row < NumRows)
+        assert(column >= 0 && column < _gridSize)
+        assert(row >= 0 && row < _gridSize)
         return tiles[column, row]
     }
     
     func isCorrectPattern() -> Bool {
         var isPattern = Bool()
         
-        for row in 0..<NumRows {
-            for column in 0..<NumColumns {
+        for row in 0..<_gridSize {
+            for column in 0..<_gridSize {
                 if let fruit = fruits[column,row] {
                     if fruit.fruitType == goal[column,row]?.fruitType {
                         isPattern = true

@@ -49,9 +49,9 @@ class GameViewController: UIViewController {
         // Setup the level.
         level = Level(filename: "Level_0")
         scene.level = level
-        
+        scene.setUpGrid()
         scene.addTiles()
-        scene.swipeHandler = handleSwipe
+        scene.viewOnlyGrid.swipeHandler = handleSwipe
         
         // Present the scene.
         skView.presentScene(scene)
@@ -76,7 +76,17 @@ class GameViewController: UIViewController {
         
         scene.animateSwap(swap) {
             self.scene.changeSprites(swap){
-                self.view.isUserInteractionEnabled = true
+                if self.level.isCorrectPattern() {
+                    self.view.isUserInteractionEnabled = false
+                    print("CORRECT PATTERN")
+                    self.scene.animateGameOver({
+                        print("YOU WIN")
+                        self.view.isUserInteractionEnabled = true
+                    })
+                }
+                else {
+                    self.view.isUserInteractionEnabled = true
+                }
             }
         }
 

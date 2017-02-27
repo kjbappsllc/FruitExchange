@@ -27,6 +27,7 @@
 		04C65A5D1D5E7FEE0019CC64 /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C65A5C1D5E7FEE0019CC64 /* Swap.swift */; };
 		04C65A621D5ECC070019CC64 /* Level_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C65A611D5ECC070019CC64 /* Level_0.json */; };
 		04E988E51D891E2E0054C6A5 /* Hercules.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 04E988E41D891E2E0054C6A5 /* Hercules.ttf */; };
+		04FE981A1E6459E300CC4328 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FE98191E6459E300CC4328 /* Grid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		04C65A5C1D5E7FEE0019CC64 /* Swap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		04C65A611D5ECC070019CC64 /* Level_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_0.json; sourceTree = "<group>"; };
 		04E988E41D891E2E0054C6A5 /* Hercules.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Hercules.ttf; sourceTree = "<group>"; };
+		04FE98191E6459E300CC4328 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			children = (
 				04C65A371D5BD0A60019CC64 /* GameScene.sks */,
 				04C65A391D5BD0A60019CC64 /* GameScene.swift */,
+				04FE98191E6459E300CC4328 /* Grid.swift */,
 				04386E5E1DDD5D9400FCC7A2 /* CircleMenuLib */,
 				04C65A3D1D5BD0A60019CC64 /* Main.storyboard */,
 				04C65A421D5BD0A60019CC64 /* LaunchScreen.storyboard */,
@@ -271,6 +274,7 @@
 				04C65A3A1D5BD0A60019CC64 /* GameScene.swift in Sources */,
 				04C65A521D5BFFF50019CC64 /* Tile.swift in Sources */,
 				04386E651DDD5D9400FCC7A2 /* CircleMenuButton.swift in Sources */,
+				04FE981A1E6459E300CC4328 /* Grid.swift in Sources */,
 				04C65A3C1D5BD0A60019CC64 /* GameViewController.swift in Sources */,
 				04C65A361D5BD0A60019CC64 /* AppDelegate.swift in Sources */,
 				04C65A4E1D5BFCF50019CC64 /* Array2D.swift in Sources */,

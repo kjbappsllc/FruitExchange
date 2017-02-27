@@ -13,29 +13,18 @@ class GameScene: SKScene {
     private var selectionSprite = SKSpriteNode()
     
     private var _level: Level!
+    private var grid: Grid!
+    private var spriteSize: CGFloat = 0
     private var movesLabel = SKLabelNode()
     
     fileprivate var swipeFromColumn: Int?
     fileprivate var swipeFromRow: Int?
     
-    private let TileWidth: CGFloat = 48.0 * 1.6
-    private let TileHeight: CGFloat = 52.0 * 1.6
     
     private let gameLayer = SKNode()
     private let hudLayer = SKNode()
     private let fruitsLayer = SKNode()
     private let tilesLayer = SKNode()
-    
-    private var _swipeHandler: ((Swap) -> ())?
-    
-    var swipeHandler: ((Swap) -> ())? {
-        get {
-            return _swipeHandler
-        }
-        set {
-            _swipeHandler = newValue
-        }
-    }
     
     var level: Level {
         get {
@@ -43,6 +32,12 @@ class GameScene: SKScene {
         }
         set {
             _level = newValue
+        }
+    }
+    
+    var viewOnlyGrid: Grid {
+        get {
+            return grid
         }
     }
     
@@ -58,15 +53,9 @@ class GameScene: SKScene {
         gameLayer.isHidden = true
         movesLabel.alpha = 0
         
-        let layerPosition = CGPoint(
-            x: -TileWidth * CGFloat(NumColumns) / 2,
-            y: -TileHeight * CGFloat(NumRows) / 2)
-        
-        tilesLayer.position = layerPosition
-        gameLayer.addChild(tilesLayer)
-        
-        fruitsLayer.position = layerPosition
-        gameLayer.addChild(fruitsLayer)
+        grid.level = level
+        grid.addChild(tilesLayer)
+        grid.addChild(fruitsLayer)
         
         swipeFromColumn = nil
         swipeFromRow = nil
@@ -77,34 +66,39 @@ class GameScene: SKScene {
         movesLabel.text = String(number)
     }
     
+    func getGridSpriteSizes(gridSize: Int) -> CGFloat {
+        var sizing = CGFloat()
+        switch(gridSize) {
+        case 2:
+            sizing = 200
+        case 3:
+            sizing = 166.67
+        case 4:
+            sizing = 125
+        case 5:
+            sizing = 100
+        case 6:
+            sizing = 83.3
+        default:
+            sizing = 0.0
+        }
+        
+        return sizing
+    }
+    
     func addSpritesForFruit(_ fruits: Set<Fruit>) {
         for fruit in fruits {
             let sprite = SKSpriteNode(imageNamed: fruit.fruitType.spriteName)
-            sprite.position = pointForColumn(fruit.column, row:fruit.row)
-            sprite.size = CGSize(width: TileWidth, height: TileHeight)
+            sprite.position = grid.gridPosition(row: fruit.row, col: fruit.column)
+            sprite.size = CGSize(width: spriteSize - 20, height: spriteSize - 20)
             fruitsLayer.addChild(sprite)
             fruit.sprite = sprite
         }
     }
-
-    func pointForColumn(_ column: Int, row: Int) -> CGPoint {
-        return CGPoint(
-            x: CGFloat(column)*TileWidth + TileWidth/2,
-            y: CGFloat(row)*TileHeight + TileHeight/2)
-    }
-    
-    func convertPoint(_ point: CGPoint) -> (success: Bool, column: Int, row: Int) {
-        if point.x >= 0 && point.x < CGFloat(NumColumns)*TileWidth &&
-            point.y >= 0 && point.y < CGFloat(NumRows)*TileHeight {
-            return (true, Int(point.x / TileWidth), Int(point.y / TileHeight))
-        } else {
-            return (false, 0, 0)  // invalid location
-        }
-    }
     
     func addTiles() {
-        for row in 0..<NumRows {
-            for column in 0..<NumColumns {
+        for row in 0..<level.gridSize {
+            for column in 0..<level.gridSize{
                 var tileNode = SKSpriteNode()
                 if level.tileAtColumn(column, row: row) != nil {
                     if (column % 2 == 0 && row % 2 == 0) || (column % 2 != 0 && row % 2 != 0) {
@@ -113,11 +107,20 @@ class GameScene: SKScene {
                     else {
                         tileNode = SKSpriteNode(imageNamed: "Tile1")
                     }
-                    tileNode.size = CGSize(width: TileWidth, height: TileHeight)
-                    tileNode.position = pointForColumn(column, row: row)
+                    tileNode.size = CGSize(width: spriteSize - 10, height: spriteSize - 10)
+                    tileNode.position = grid.gridPosition(row: column, col: row)
                     tilesLayer.addChild(tileNode)
                 }
             }
+        }
+    }
+    
+    func setUpGrid() {
+        spriteSize = getGridSpriteSizes(gridSize: level.gridSize)
+        if let griding = Grid(blockSize: spriteSize, rows:level.gridSize, cols:level.gridSize) {
+            grid = griding
+            grid.spriteSize = spriteSize
+            gameLayer.addChild(grid)
         }
     }
     
@@ -128,7 +131,7 @@ class GameScene: SKScene {
         
         if let sprite = fruit.sprite {
             let texture = SKTexture(imageNamed: fruit.fruitType.highlightedSpriteName)
-            selectionSprite.size = CGSize(width: TileWidth, height: TileHeight)
+            selectionSprite.size = CGSize(width: spriteSize - 20, height: spriteSize - 20)
             selectionSprite.run(SKAction.setTexture(texture))
             
             sprite.addChild(selectionSprite)
@@ -172,8 +175,8 @@ class GameScene: SKScene {
             spriteA = SKSpriteNode(imageNamed: swap.fruitA.fruitType.spriteName)
             swap.fruitA.sprite = spriteA
             
-            spriteA.position = pointForColumn(swap.fruitA.column, row:swap.fruitA.row)
-            spriteA.size = CGSize(width: TileWidth, height: TileHeight)
+            spriteA.position = grid.gridPosition(row: swap.fruitA.row, col: swap.fruitA.column)
+            spriteA.size = CGSize(width: spriteSize - 20, height: spriteSize - 20)
             fruitsLayer.addChild(spriteA)
             spriteA.run(SKAction.sequence([scaleA, SKAction.scale(to: 1.0, duration: 0.1)]))
             
@@ -182,8 +185,8 @@ class GameScene: SKScene {
             spriteB = SKSpriteNode(imageNamed: swap.fruitB.fruitType.spriteName)
             swap.fruitB.sprite = spriteB
             
-            spriteB.position = pointForColumn(swap.fruitB.column, row:swap.fruitB.row)
-            spriteB.size = CGSize(width: TileWidth, height: TileHeight)
+            spriteB.position = grid.gridPosition(row: swap.fruitB.row, col:swap.fruitB.column)
+            spriteB.size = CGSize(width: spriteSize - 20, height: spriteSize - 20)
             fruitsLayer.addChild(spriteB)
             spriteB.run(SKAction.sequence([scaleB, SKAction.scale(to: 1.0, duration: 0.1)]),completion:completion)
         }
@@ -208,90 +211,6 @@ class GameScene: SKScene {
     
     func removeAllFruitSprites() {
         fruitsLayer.removeAllChildren()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // 1
-        guard let touch = touches.first else { return }
-        let location = touch.location(in: fruitsLayer)
-        // 2
-        let (success, column, row) = convertPoint(location)
-        if success {
-            // 3
-            if let fruit = level.FruitAtColumn(column, row: row){
-                // 4
-                swipeFromColumn = column
-                swipeFromRow = row
-                showSelectionIndicatorForFruit(fruit)
-                
-            }
-        }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // 1
-        guard swipeFromColumn != nil else { return }
-        
-        // 2
-        guard let touch = touches.first else { return }
-        let location = touch.location(in: fruitsLayer)
-        
-        let (success, column, row) = convertPoint(location)
-        if success {
-            
-            // 3
-            var horzDelta = 0, vertDelta = 0
-            if column < swipeFromColumn! {          // swipe left
-                horzDelta = -1
-            } else if column > swipeFromColumn! {   // swipe right
-                horzDelta = 1
-            } else if row < swipeFromRow! {         // swipe down
-                vertDelta = -1
-            } else if row > swipeFromRow! {         // swipe up
-                vertDelta = 1
-            }
-            
-            // 4
-            if horzDelta != 0 || vertDelta != 0 {
-                trySwapHorizontal(horzDelta, vertical: vertDelta)
-                hideSelectionIndicator()
-                // 5
-                swipeFromColumn = nil
-            }
-        }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if selectionSprite.parent != nil && swipeFromColumn != nil {
-            hideSelectionIndicator()
-        }
-        
-        swipeFromColumn = nil
-        swipeFromRow = nil
-        
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touches = touches
-        touchesEnded(touches, with: event)
-    }
-    
-    func trySwapHorizontal(_ horzDelta: Int, vertical vertDelta: Int) {
-        // 1
-        let toColumn = swipeFromColumn! + horzDelta
-        let toRow = swipeFromRow! + vertDelta
-        // 2
-        guard toColumn >= 0 && toColumn < NumColumns else { return }
-        guard toRow >= 0 && toRow < NumRows else { return }
-        // 3
-        if let toFruit = level.FruitAtColumn(toColumn, row: toRow),
-            let fromFruit = level.FruitAtColumn(swipeFromColumn!, row: swipeFromRow!) {
-            // 4
-            if let handler = swipeHandler {
-                let swap = Swap(fruitA: fromFruit, fruitB: toFruit)
-                handler(swap)
-            }
-        }
     }
    
     override func update(_ currentTime: TimeInterval) {

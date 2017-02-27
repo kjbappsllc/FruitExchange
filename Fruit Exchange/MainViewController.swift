@@ -70,6 +70,8 @@ class MainViewController: UIViewController, CircleMenuDelegate {
     
     func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int) {
         print("button did selected: \(atIndex)")
+        let next = self.storyboard?.instantiateViewController(withIdentifier: "game") as? GameViewController
+        self.present(next!, animated: false, completion: nil)
     }
     
 
